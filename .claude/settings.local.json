@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(dir)",
+      "Bash(dir:*)",
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(mkdir:*)",
+      "Bash(python -m pip install:*)",
+      "Bash(python tests/test_api_client.py)",
+      "Bash(python tests/test_path_manager.py)",
+      "Bash(python -m pytest tests/test_path_manager.py::TestPathManager::test_with_real_api_data -v -s)",
+      "Bash(python test_download.py:*)",
+      "Bash(python test:*)",
+      "Bash(python:*)",
+      "Bash(for dir in test_downloads/models/Illustrious/CONCEPT/alericiviai_Extreme Size difference_V1 test_downloads/models/Illustrious/CONCEPT/alericiviai_Anal gape_V1)",
+      "Bash(do echo \"=== $dir ===\")",
+      "Bash(echo)",
+      "Bash(done)",
+      "Bash(ruff check:*)",
+      "Bash(black:*)",
+      "Bash(pip install:*)",
+      "Bash(mypy:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)"
+    ],
+    "deny": []
+  }
+}

@@ -1,0 +1,14 @@
+# CivitaiモデルURLリスト
+# 1行に1つのモデルURLを記載してください
+# '#' で始まる行はコメントとして無視されます
+
+# URL形式の例: 
+# https://civitai.com/models/1164832/selfie-poses-big-ass
+# https://civitai.com/models/789012
+# https://civitai.com/models/345678?tab=gallery
+
+# 以下の形式に対応しています:
+# - https://civitai.com/models/123456/model-name
+# - https://civitai.com/models/123456
+# - https://civitai.com/models/123456?tab=gallery
+# - 123456 (モデルIDの直接入力もサポート)

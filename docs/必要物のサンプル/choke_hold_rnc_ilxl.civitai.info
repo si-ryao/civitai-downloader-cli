@@ -1,0 +1,126 @@
+{
+    "id": 1421739,
+    "modelId": 902206,
+    "name": "IL_v1.0",
+    "description": null,
+    "downloadUrl": "https://civitai.com/api/download/models/1421739",
+    "createdAt": "",
+    "updatedAt": "",
+    "publishedAt": "2025-02-16T14:27:25.058Z",
+    "status": "Published",
+    "trainingStatus": null,
+    "trainingDetails": null,
+    "baseModel": "Illustrious",
+    "baseModelType": "Standard",
+    "uploadType": "Created",
+    "usageControl": "Download",
+    "air": "",
+    "trainedWords": [
+        "choke hold \\(rnc\\)"
+    ],
+    "earlyAccessEndsAt": null,
+    "earlyAccessConfig": null,
+    "stats": {
+        "downloadCount": 3993,
+        "rating": 0,
+        "ratingCount": 0,
+        "thumbsDownCount": 0,
+        "thumbsUpCount": 668
+    },
+    "model": {
+        "name": "(IL+Pony) Rear Naked Choke / 裸絞め",
+        "type": "LORA",
+        "nsfw": true,
+        "poi": false
+    },
+    "files": [
+        {
+            "downloadUrl": "https://civitai.com/api/download/models/1421739",
+            "hashes": {
+                "AutoV1": "28DFF7EC",
+                "AutoV2": "B76A1FC247",
+                "AutoV3": "8C0FD69AF3D1",
+                "BLAKE3": "E8E25E0D99471B5F9EE1296EC7228B0EA892BE0ADDC57C3C9E54F48CDA3DF009",
+                "CRC32": "65052023",
+                "SHA256": "B76A1FC247DB893BC8C1290420F0E96B6F86129576A9FB885C20CB7EDBEFEEA5"
+            },
+            "id": 1323445,
+            "metadata": {
+                "format": "SafeTensor",
+                "fp": null,
+                "size": null
+            },
+            "name": "choke_hold_rnc_ilxl.safetensors",
+            "pickleScanMessage": "No Pickle imports",
+            "pickleScanResult": "Success",
+            "primary": true,
+            "scannedAt": "2025-02-16T14:30:42.967Z",
+            "sizeKB": 166553.16015625,
+            "type": "Model",
+            "virusScanMessage": null,
+            "virusScanResult": "Success"
+        }
+    ],
+    "images": [
+        {
+            "hasMeta": true,
+            "hasPositivePrompt": true,
+            "hash": "UJLM*Q_N-;-;55%htRt7GIxv=|oJ?btRTKt7",
+            "height": 2432,
+            "id": 58189862,
+            "minor": false,
+            "nsfwLevel": 16,
+            "onSite": false,
+            "poi": false,
+            "remixOfId": null,
+            "type": "image",
+            "url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/e802c8b2-d53a-4583-8c73-474b68a9bb21/width=1664/58189862.jpeg",
+            "width": 1664
+        },
+        {
+            "hasMeta": true,
+            "hasPositivePrompt": true,
+            "hash": "UMLWhe~qX3.8nz-;?bx]0LRjw[Myk?snxZt6",
+            "height": 2432,
+            "id": 58189860,
+            "minor": false,
+            "nsfwLevel": 16,
+            "onSite": false,
+            "poi": false,
+            "remixOfId": null,
+            "type": "image",
+            "url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/3abbc57b-c18b-47f4-892b-d14b4a66d5b7/width=1664/58189860.jpeg",
+            "width": 1664
+        },
+        {
+            "hasMeta": true,
+            "hasPositivePrompt": true,
+            "hash": "UJP5yT~q.l_3.Tg3RiM|0#tRtQV@?cRPNGf5",
+            "height": 2040,
+            "id": 58189858,
+            "minor": false,
+            "nsfwLevel": 16,
+            "onSite": false,
+            "poi": false,
+            "remixOfId": null,
+            "type": "image",
+            "url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/1d7d8319-2b4a-404a-bdf1-de837bb955a0/width=1536/58189858.jpeg",
+            "width": 1536
+        },
+        {
+            "hasMeta": true,
+            "hasPositivePrompt": true,
+            "hash": "UWNI:B~q5RxaOYa}VsbINIoeslRj9]RP9GRj",
+            "height": 2040,
+            "id": 58189857,
+            "minor": false,
+            "nsfwLevel": 16,
+            "onSite": false,
+            "poi": false,
+            "remixOfId": null,
+            "type": "image",
+            "url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/3a0cb662-163e-46f5-9306-376dea576819/width=1536/58189857.jpeg",
+            "width": 1536
+        }
+    ]
+}
