@@ -22,7 +22,13 @@ class CivitaiApiClient:
     def __init__(self, config: DownloadConfig):
         self.config = config
         self.session = requests.Session()
+        
+        # Ensure UTF-8 encoding for HTTP responses (fixes cp932 environment issues)
         self.session.headers.update(config.headers)
+        self.session.headers.update({
+            'Accept-Charset': 'utf-8',
+        })
+        
         self.base_url = "https://civitai.com/api/v1"
 
         # Rate limiting
@@ -70,6 +76,8 @@ class CivitaiApiClient:
                     status_code=response.status_code,
                 )
 
+            # Ensure UTF-8 encoding for JSON response (fixes cp932 environment issues)
+            response.encoding = 'utf-8'
             return response.json()
 
         except requests.exceptions.RequestException as e:
