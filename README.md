@@ -25,12 +25,9 @@ echo "your_api_key_here" > api_key.md
 ## デフォルト出力ディレクトリの設定
 
 ### default_output_dir.txtファイルを作成
-```bash
-# お好みのディレクトリパスを指定
-echo "D:\CivitaiModels" > default_output_dir.txt
-
-# 例ファイルをコピーして編集
-cp default_output_dir.txt.example default_output_dir.txt
+次のように記載すれば、DドライブのCivitaiModelsフォルダにダウンロードが格納される
+```
+D:\CivitaiModels
 ```
 
 **重要**: このファイルがない場合、`./downloads`フォルダに保存されます
@@ -59,13 +56,11 @@ SDXL
 
 ### フィルターを適用してダウンロード
 ```bash
-python -m civitai_dl --user username --parallel-mode --base-model-filter model_filter_my_models.txt
+python -m civitai_dl --user username --parallel-mode --base-model-filter model_filter_white_list.txt
 ```
 
 **提供済みフィルター例**:
-- `model_filter_white_list.txt` - Illustrious + Pony
-- `model_filter_illustrious_only.txt` - Illustriousのみ  
-- `model_filter_sdxl_only.txt` - SDXLのみ
+- `model_filter_white_list.txt` - Illustrious + Pony。任意に書き換え可能
 
 ## 高速並列モードの実行
 
