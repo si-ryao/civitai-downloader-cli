@@ -1,0 +1,23 @@
+# Civitai API Key Configuration
+
+Place your Civitai API key in a file named `api_key.md` in this format:
+
+```
+YOUR_API_KEY_HERE
+```
+
+## How to get your API key:
+
+1. Log in to Civitai.com
+2. Go to your Account Settings
+3. Find the API Keys section
+4. Generate a new API key
+5. Copy and paste it into `api_key.md`
+
+## Alternative methods:
+
+You can also set your API key using:
+- Environment variable: `export CIVITAI_API_KEY=your_key_here`
+- Command line option: `--token your_key_here`
+
+**Note**: Never commit your actual API key to version control!

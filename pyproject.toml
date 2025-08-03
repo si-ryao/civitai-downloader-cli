@@ -28,6 +28,7 @@ dependencies = [
     "tqdm>=4.66.0",
     "click>=8.1.0",
     "pathlib",
+    "psutil>=5.9.0",
 ]
 
 [project.optional-dependencies]

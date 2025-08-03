@@ -1,7 +1,7 @@
 """Integrated download service for models and images."""
 
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, List, Optional
 
 from ..adapters.api_client import CivitaiApiClient
 from ..adapters.downloader import FileDownloader
@@ -13,12 +13,20 @@ from ..services.path_manager import PathManager
 class DownloadService:
     """統合ダウンロードサービス."""
 
-    def __init__(self, config: DownloadConfig):
+    def __init__(self, config: DownloadConfig, skip_existing: bool = False, base_model_filter: Optional[List[str]] = None):
         self.config = config
         self.api_client = CivitaiApiClient(config)
-        self.file_downloader = FileDownloader(config)
+        self.file_downloader = FileDownloader(config, skip_existing=skip_existing)
         self.path_manager = PathManager(config)
         self.metadata_generator = MetadataGenerator()
+        self.base_model_filter = base_model_filter
+        
+        # フィルター統計
+        self.filter_stats = {
+            "total_checked": 0,
+            "filtered_out": 0,
+            "passed_filter": 0
+        }
 
     def download_user_models(self, username: str) -> Dict[str, Any]:
         """指定ユーザーの全モデルをダウンロード."""
@@ -47,6 +55,11 @@ class DownloadService:
         for i, model in enumerate(all_models, 1):
             print(f"\n📦 Processing model {i}/{len(all_models)}: {model['name']}")
 
+            # ベースモデルフィルターチェック
+            if not self._should_download_model(model):
+                print(f"  🔍 Skipped: Base model not in whitelist")
+                continue
+
             try:
                 model_result = self.download_single_model(model)
                 results["models"].append(model_result)
@@ -73,6 +86,11 @@ class DownloadService:
         print(f"   Total: {results['total_models']}")
         print(f"   Success: {results['successful_downloads']}")
         print(f"   Failed: {results['failed_downloads']}")
+        
+        # フィルター統計表示
+        if self.base_model_filter:
+            print(f"   🔍 Filter stats: {self.filter_stats['passed_filter']}/{self.filter_stats['total_checked']} models passed filter ({self.filter_stats['filtered_out']} filtered out)")
+            results["filter_stats"] = self.filter_stats.copy()
 
         return results
 
@@ -104,6 +122,8 @@ class DownloadService:
 
         for version in versions:
             print(f"    📥 Downloading version: {version.get('name', 'Unknown')}")
+            # 各バージョンごとに統計をリセット
+            self.file_downloader.reset_stats()
 
             try:
                 version_result = self.download_single_version(model_data, version)
@@ -169,7 +189,13 @@ class DownloadService:
             # 4. ギャラリー画像ダウンロード
             self._download_gallery_images(model_data, file_paths, version_result)
 
-            print(f"      ✅ Version download completed: {version_name}")
+            # ダウンロード統計を表示
+            stats = self.file_downloader.get_stats()
+            if stats["skipped"] > 0:
+                print(f"      ✅ Version download completed: {version_name}")
+                print(f"         📊 Downloaded: {stats['downloaded']}, Skipped: {stats['skipped']}")
+            else:
+                print(f"      ✅ Version download completed: {version_name}")
 
         except Exception as e:
             print(f"      ❌ Version download failed: {e}")
@@ -372,6 +398,8 @@ class DownloadService:
     def download_user_images(self, username: str) -> Dict[str, Any]:
         """指定ユーザーの投稿画像をダウンロード."""
         print(f"🖼️  Starting user images download for: {username}")
+        # 統計をリセット
+        self.file_downloader.reset_stats()
 
         try:
             # ユーザーの投稿画像を取得
@@ -450,10 +478,17 @@ class DownloadService:
                     print(f"      ⚠️  Failed to download image {image_id}: {e}")
                     result["failed_images"] += 1
 
+            # 最終統計を表示
+            stats = self.file_downloader.get_stats()
             print("🎉 User images download completed!")
-            print(
-                f"   📊 Downloaded: {result['downloaded_images']}/{result['total_images']}"
-            )
+            if stats["skipped"] > 0:
+                print(
+                    f"   📊 Downloaded: {stats['downloaded']}, Skipped: {stats['skipped']} (Total: {result['total_images']})"
+                )
+            else:
+                print(
+                    f"   📊 Downloaded: {result['downloaded_images']}/{result['total_images']}"
+                )
             print(f"   📁 Saved to: {images_dir}")
 
             return result
@@ -461,3 +496,39 @@ class DownloadService:
         except Exception as e:
             print(f"❌ Error downloading user images for {username}: {e}")
             return {"success": False, "message": f"Error downloading user images: {e}"}
+
+    def _should_download_model(self, model_data: Dict[str, Any]) -> bool:
+        """ベースモデルフィルターに基づいてモデルをダウンロードすべきかチェック."""
+        self.filter_stats["total_checked"] += 1
+        
+        # フィルターが設定されていない場合は全てダウンロード
+        if not self.base_model_filter:
+            self.filter_stats["passed_filter"] += 1
+            return True
+        
+        # モデルのバージョンからベースモデル情報を取得
+        versions = model_data.get("modelVersions", [])
+        if not versions:
+            # バージョンが無い場合は保守的にスキップ
+            self.filter_stats["filtered_out"] += 1
+            return False
+        
+        # 最新バージョン（通常は最初）のベースモデルを確認
+        latest_version = versions[0]
+        base_model = latest_version.get("baseModel", "").strip()
+        
+        if not base_model:
+            # ベースモデル情報がない場合は保守的にスキップ
+            self.filter_stats["filtered_out"] += 1
+            return False
+        
+        # 大文字小文字を無視してマッチング
+        base_model_lower = base_model.lower()
+        for allowed_model in self.base_model_filter:
+            if allowed_model.lower() in base_model_lower or base_model_lower in allowed_model.lower():
+                self.filter_stats["passed_filter"] += 1
+                return True
+        
+        # フィルターに一致しない場合はスキップ
+        self.filter_stats["filtered_out"] += 1
+        return False

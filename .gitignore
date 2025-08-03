@@ -3,6 +3,7 @@ api_key.md
 
 # Test downloads and temporary files
 test_downloads/
+test_*/
 downloads/
 
 # Python cache and build files

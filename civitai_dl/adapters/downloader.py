@@ -20,14 +20,19 @@ class DownloadError(Exception):
 class FileDownloader:
     """ファイルダウンローダー with プログレスバー and SHA256検証."""
 
-    def __init__(self, config: DownloadConfig):
+    def __init__(self, config: DownloadConfig, skip_existing: bool = False):
         self.config = config
+        self.skip_existing = skip_existing
         self.session = requests.Session()
         self.session.headers.update(config.headers)
 
         # Rate limiting for downloads
         self._last_download_time = 0.0
         self._min_interval = 1.0 / config.image_api_rate  # seconds between downloads
+        
+        # Statistics
+        self.skipped_count = 0
+        self.downloaded_count = 0
 
     def _rate_limit(self) -> None:
         """Rate limiting for downloads."""
@@ -48,15 +53,27 @@ class FileDownloader:
         description: Optional[str] = None,
     ) -> bool:
         """ファイルをダウンロードし、オプションでSHA256検証を行う."""
-        if filepath.exists() and expected_sha256:
-            # 既存ファイルのSHA256を確認
-            if self._verify_sha256(filepath, expected_sha256):
-                print(f"✓ File already exists and verified: {filepath.name}")
-                return True
-            else:
-                print(
-                    f"⚠ File exists but SHA256 mismatch, re-downloading: {filepath.name}"
-                )
+        # 既存ファイルのチェック
+        if filepath.exists():
+            if expected_sha256:
+                # SHA256がある場合は検証
+                if self._verify_sha256(filepath, expected_sha256):
+                    print(f"✓ File already exists and verified: {filepath.name}")
+                    self.skipped_count += 1
+                    return True
+                else:
+                    print(
+                        f"⚠ File exists but SHA256 mismatch, re-downloading: {filepath.name}"
+                    )
+            elif self.skip_existing:
+                # skip_existingが有効で、SHA256がない場合（主に画像）
+                # ファイルサイズが1KB以上あれば有効とみなす
+                if filepath.stat().st_size > 1024:
+                    print(f"⏭️  Skipping existing file: {filepath.name}")
+                    self.skipped_count += 1
+                    return True
+                else:
+                    print(f"⚠ File exists but too small, re-downloading: {filepath.name}")
 
         # ディレクトリを作成
         filepath.parent.mkdir(parents=True, exist_ok=True)
@@ -98,6 +115,7 @@ class FileDownloader:
             else:
                 print(f"✓ Download completed: {filepath.name}")
 
+            self.downloaded_count += 1
             return True
 
         except requests.exceptions.RequestException as e:
@@ -108,6 +126,19 @@ class FileDownloader:
             if filepath.exists():
                 filepath.unlink()  # エラー時はファイルを削除
             raise DownloadError(f"Unexpected error downloading {url}: {e}")
+
+    def get_stats(self) -> dict:
+        """ダウンロード統計を取得."""
+        return {
+            "downloaded": self.downloaded_count,
+            "skipped": self.skipped_count,
+            "total": self.downloaded_count + self.skipped_count
+        }
+        
+    def reset_stats(self) -> None:
+        """統計をリセット."""
+        self.downloaded_count = 0
+        self.skipped_count = 0
 
     def _verify_sha256(self, filepath: Path, expected_sha256: str) -> bool:
         """ファイルのSHA256ハッシュを検証."""

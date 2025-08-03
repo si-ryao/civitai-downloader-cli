@@ -1,0 +1,6 @@
+# Base Model Filter - Illustrious and Pony only
+# This file contains allowed base models for filtering downloads
+# One base model per line, case-insensitive matching
+
+Illustrious
+Pony

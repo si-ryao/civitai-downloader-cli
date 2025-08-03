@@ -14,7 +14,7 @@ class DownloadConfig:
         is_test: bool = False,
         production_root: str = "H:\\Civitai\\civitai-models",
         test_root: str = "./test_downloads",
-        max_user_images: int = 50,
+        max_user_images: int = 1000,
     ):
         self.api_key = api_key or os.getenv("CIVITAI_API_KEY")
         self.is_test = is_test
