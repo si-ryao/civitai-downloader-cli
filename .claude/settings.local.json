@@ -29,7 +29,8 @@
       "Bash(move base_models_illustrious_pony.txt model_filter_white_list.txt)",
       "Bash(mv:*)",
       "Bash(rm:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(git commit:*)"
     ],
     "deny": []
   }
