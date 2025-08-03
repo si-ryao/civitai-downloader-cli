@@ -1,4 +1,0 @@
-# Model Filter - SDXL Only
-# Download only SDXL-based models
-
-SDXL

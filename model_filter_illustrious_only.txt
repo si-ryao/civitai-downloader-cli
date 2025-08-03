@@ -1,4 +1,0 @@
-# Model Filter - Illustrious Only
-# Download only Illustrious-based models
-
-Illustrious

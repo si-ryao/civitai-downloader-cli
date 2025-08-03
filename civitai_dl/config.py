@@ -5,6 +5,25 @@ from pathlib import Path
 from typing import Dict, List
 
 
+def _load_default_output_dir() -> str:
+    """Load default output directory from external config file.
+    
+    Returns:
+        Default output directory path. Falls back to './downloads' if config file not found.
+    """
+    config_file = Path("default_output_dir.txt")
+    if config_file.exists():
+        try:
+            with open(config_file, 'r', encoding='utf-8') as f:
+                path = f.read().strip()
+                if path:
+                    return path
+        except Exception:
+            pass  # Fall back to default if file read fails
+    
+    return "./downloads"
+
+
 class DownloadConfig:
     """Configuration class for download settings."""
 
@@ -12,13 +31,13 @@ class DownloadConfig:
         self,
         api_key: str | None = None,
         is_test: bool = False,
-        production_root: str = "H:\\Civitai\\civitai-models",
+        production_root: str | None = None,
         test_root: str = "./test_downloads",
         max_user_images: int = 1000,
     ):
         self.api_key = api_key or os.getenv("CIVITAI_API_KEY")
         self.is_test = is_test
-        self.production_root = production_root
+        self.production_root = production_root or _load_default_output_dir()
         self.test_root = test_root
         self.max_user_images = max_user_images
 

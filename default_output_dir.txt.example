@@ -1,0 +1,11 @@
+# Default Output Directory Configuration
+# 
+# このファイルをコピーして default_output_dir.txt として保存し、
+# お好みのダウンロード先ディレクトリを指定してください
+#
+# 例:
+# D:\AIModels
+# C:\Users\YourName\Downloads\CivitaiModels
+# ./my_downloads
+
+D:\CivitaiDownloads

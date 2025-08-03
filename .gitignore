@@ -1,6 +1,17 @@
 # API Keys and sensitive information
 api_key.md
 
+# Personal configuration
+default_output_dir.txt
+CLAUDE.md
+
+# Development documentation and scripts
+docs/
+scripts/
+
+# Claude Code configuration
+.claude/
+
 # Test downloads and temporary files
 test_downloads/
 test_*/
@@ -31,6 +42,7 @@ share/python-wheels/
 MANIFEST
 
 # Testing
+tests/
 .pytest_cache/
 .coverage
 htmlcov/
@@ -73,3 +85,9 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
+
+# Cache directories
+.cache/
+.mypy_cache/
+.ruff_cache/
+__pycache__/
